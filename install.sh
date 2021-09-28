@@ -1829,9 +1829,9 @@ After=syslog.target network.target remote-fs.target nss-lookup.target
 [Service]
 Type=forking
 PIDFile=/etc/nginx/logs/nginx.pid
-ExecStartPre=/etc/nginx/sbin/nginx -t
-ExecStart=/etc/nginx/sbin/nginx -c ${nginx_dir}/conf/nginx.conf
-ExecReload=/etc/nginx/sbin/nginx -s reload
+ExecStartPre=/usr/sbin/nginx -t
+ExecStart=/usr/sbin/nginx -c ${nginx_dir}/conf/nginx.conf
+ExecReload=/usr/sbin/nginx -s reload
 ExecStop=/bin/kill -s QUIT \$MAINPID
 PrivateTmp=true
 
