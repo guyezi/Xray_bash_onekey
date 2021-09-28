@@ -5,7 +5,7 @@ export PATH
 cert_group="nobody"
 guyezi_dir="/etc/guyezi"
 nginx_systemd_file="/etc/systemd/system/nginx.service"
-ssl_chainpath="${guyezi_dir}/cert"
+ssl_chainpath="/cert"
 xray_qr_config_file="${guyezi_dir}/info/vmess_qr.json"
 domain=$(grep '\"host\"' ${xray_qr_config_file} | awk -F '"' '{print $4}')
 bt_nginx=$(grep '\"bt_nginx\"' ${xray_qr_config_file} | awk -F '"' '{print $4}')
