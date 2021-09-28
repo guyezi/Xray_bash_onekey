@@ -67,6 +67,7 @@ myemali="admin@guyezi.com"
 nginx_version="1.21.3"
 openssl_version="1.1.1g"
 jemalloc_version="5.2.1"
+fancyindex_version="0.5.1"
 bt_nginx="None"
 read_config_status=1
 xtls_add_more="off"
@@ -716,7 +717,7 @@ nginx_install() {
     judge "openssl 下载"
     wget -nc --no-check-certificate https://github.com/jemalloc/jemalloc/releases/download/${jemalloc_version}/jemalloc-${jemalloc_version}.tar.bz2 -P ${nginx_openssl_src}
     judge "jemalloc 下载"
-    git clone https://github.com/aperezdc/ngx-fancyindex ${nginx_openssl_src}/ngx-fancyindex
+    wget -nc --no-check-certificate  https://github.com/aperezdc/ngx-fancyindex/releases/download/${fancyindex_version}.tar.gz -P ${nginx_openssl_src}
     judge "ngx-fancyindex 下载"    
 
     cd ${nginx_openssl_src} || exit
@@ -729,6 +730,9 @@ nginx_install() {
 
     [[ -d jemalloc-${jemalloc_version} ]] && rm -rf jemalloc-${jemalloc_version}
     tar -xvf jemalloc-${jemalloc_version}.tar.bz2
+
+    [[ -d ngx-fancyindex-${fancyindex_version} ]] && rm -rf ngx-fancyindex-${fancyindex_version}
+    tar -zxvf ngx-fancyindex-${fancyindex_version}.tar.gz
 
     [[ -d ${nginx_dir} ]] && rm -rf ${nginx_dir}
 
@@ -790,7 +794,7 @@ nginx_install() {
     --with-pcre \
     --with-cc-opt='-O3' \
     --with-ld-opt="-ljemalloc" \
-    --add-module=../ngx-fancyindex \
+    --add-module=../ngx-fancyindex-${fancyindex_version} \
     --with-openssl=../openssl-${openssl_version}     
     judge "编译检查"
     make -j ${THREAD} && make install
