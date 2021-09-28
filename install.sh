@@ -10,7 +10,7 @@ cd "$(
 
 #=====================================================
 #	System Request: Debian 9+/Ubuntu 18.04+/Centos 7+
-#	Author:	paniy
+#	Author:	孤爺仔
 #	Dscription: Xray Onekey Management
 #	Version: 2.0
 #	email: admin@guyezi.com
@@ -32,7 +32,7 @@ OK="${Green}[OK]${Font}"
 Error="${Red}[错误]${Font}"
 Warning="${Red}[警告]${Font}"
 
-shell_version="1.8.2.2"
+shell_version="1.8.2.3"
 shell_mode="未安装"
 tls_mode="None"
 ws_grpc_mode="None"
@@ -63,9 +63,9 @@ xray_error_log="/var/log/xray/error.log"
 amce_sh_file="/root/.acme.sh/acme.sh"
 ssl_update_file="${guyezi_dir}/ssl_update.sh"
 cert_group="nobody"
-myemali="my@example.com"
-nginx_version="1.20.1"
-openssl_version="1.1.1l"
+myemali="admin@guyezi.com"
+nginx_version="1.21.3"
+openssl_version="1.1.1g"
 jemalloc_version="5.2.1"
 bt_nginx="None"
 read_config_status=1
@@ -540,7 +540,7 @@ modify_nginx_origin_conf() {
     sed -i "s/^\( *\)worker_connections  1024;.*/\1worker_connections  4096;/" ${nginx_dir}/conf/nginx.conf
     sed -i '$i include /etc/guyezi/conf/nginx/*.conf;' ${nginx_dir}/conf/nginx.conf
     sed -i "/http\( *\){/a \\\tserver_tokens off;" ${nginx_dir}/conf/nginx.conf
-    sed -i "/error_page.*504/i \\\t\\tif (\$host = '${local_ip}') {\\n\\t\\t\\treturn 302 https:\/\/www.bing.com;\\n\\t\\t}" ${nginx_dir}/conf/nginx.conf
+    sed -i "/error_page.*504/i \\\t\\tif (\$host = '${local_ip}') {\\n\\t\\t\\treturn 302 https:\/\/yun.guyezi.com;\\n\\t\\t}" ${nginx_dir}/conf/nginx.conf
 }
 
 modify_nginx_port() {
@@ -716,6 +716,8 @@ nginx_install() {
     judge "openssl 下载"
     wget -nc --no-check-certificate https://github.com/jemalloc/jemalloc/releases/download/${jemalloc_version}/jemalloc-${jemalloc_version}.tar.bz2 -P ${nginx_openssl_src}
     judge "jemalloc 下载"
+    git clone https://github.com/aperezdc/ngx-fancyindex ${nginx_openssl_src}/ngx-fancyindex
+    judge "ngx-fancyindex 下载"    
 
     cd ${nginx_openssl_src} || exit
 
@@ -748,26 +750,48 @@ nginx_install() {
 
     #增加http_sub_module用于反向代理替换关键词
     ./configure --prefix=${nginx_dir} \
-    --user=root \
-    --group=root \
-    --with-http_ssl_module \
-    --with-http_gzip_static_module \
-    --with-http_stub_status_module \
-    --with-pcre \
+    --sbin-path=/usr/sbin/nginx \
+    --modules-path=/usr/lib64/nginx/modules \
+    --error-log-path=/var/log/nginx/error.log \
+    --http-log-path=/var/log/nginx/access.log  \
+    --pid-path=/var/run/nginx.pid \
+    --lock-path=/var/run/nginx.lock \
+    --http-client-body-temp-path=/var/cache/nginx/client_temp \
+    --http-proxy-temp-path=/var/cac/var/cache/nginx/proxy_temp \
+    --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
+    --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
+    --http-scgi-temp-path=/var/cache/nginx/scgi_temp \
+    --user=nginx \
+    --group=nginx \
+    --with-compat \
+    --with-file-aio \
+    --with-threads \
+    --with-http_addition_module \
+    --with-http_auth_request_module \
+    --with-http_dav_module \
     --with-http_flv_module \
+    --with-http_gunzip_module \
+    --with-http_gzip_static_module \
     --with-http_mp4_module \
+    --with-http_random_index_module \
     --with-http_realip_module \
     --with-http_secure_link_module \
     --with-http_slice_module \
-    --with-stream \
-    --with-stream_ssl_module \
-    --with-stream_realip_module \
-    --with-stream_ssl_preread_module \
+    --with-http_ssl_module \
+    --with-http_stub_status_module \
     --with-http_sub_module \
     --with-http_v2_module \
+    --with-mail \
+    --with-mail_ssl_module \
+    --with-stream \
+    --with-stream_realip_module \
+    --with-stream_ssl_module \
+    --with-stream_ssl_preread_module \
+    --with-pcre \
     --with-cc-opt='-O3' \
     --with-ld-opt="-ljemalloc" \
-    --with-openssl=../openssl-${openssl_version}
+    --add-module=../ngx-fancyindex \
+    --with-openssl=../openssl-${openssl_version}     
     judge "编译检查"
     make -j ${THREAD} && make install
     judge "Nginx 编译安装"
@@ -1230,7 +1254,7 @@ nginx_conf_add() {
         listen 80;
         listen [::]:80;
         server_name serveraddr.com;
-        return 301 https://www.guyezi.com\$request_uri;
+        return 301 https://yun.guyezi.com\$request_uri;
     }
 EOF
     wait
@@ -1801,9 +1825,9 @@ After=syslog.target network.target remote-fs.target nss-lookup.target
 [Service]
 Type=forking
 PIDFile=/etc/nginx/logs/nginx.pid
-ExecStartPre=/usr/sbin/nginx -t
-ExecStart=/usr/sbin/nginx -c ${nginx_dir}/conf/nginx.conf
-ExecReload=/usr/sbin/nginx -s reload
+ExecStartPre=/etc/nginx/sbin/nginx -t
+ExecStart=/etc/nginx/sbin/nginx -c ${nginx_dir}/conf/nginx.conf
+ExecReload=/etc/nginx/sbin/nginx -s reload
 ExecStop=/bin/kill -s QUIT \$MAINPID
 PrivateTmp=true
 
@@ -2283,9 +2307,9 @@ guyezi_commend() {
 menu() {
 
     echo -e "\nXray 安装管理脚本 ${Red}[${shell_version}]${Font}"
-    echo -e "--- authored by guyezi ---"
+    echo -e "--- authored by paniy ---"
     echo -e "--- changed by www.guyezi.com ---"
-    echo -e "--- https://github.com/guyezi ---\n"
+    echo -e "--- https://github.com/paniy ---\n"
     echo -e "当前已安装模式: ${shell_mode}\n"
 
     guyezi_commend
@@ -2491,3 +2515,4 @@ menu() {
 
 judge_mode
 list "$1"
+
