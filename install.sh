@@ -717,8 +717,8 @@ nginx_install() {
     judge "openssl 下载"
     wget -nc --no-check-certificate https://github.com/jemalloc/jemalloc/releases/download/${jemalloc_version}/jemalloc-${jemalloc_version}.tar.bz2 -P ${nginx_openssl_src}
     judge "jemalloc 下载"
-    wget -nc --no-check-certificate  https://github.com/aperezdc/ngx-fancyindex/releases/download/${fancyindex_version}.tar.xz -P ${nginx_openssl_src}
-    judge "ngx-fancyindex 下载"    
+    wget -nc --no-check-certificate  https://github.com/aperezdc/ngx-fancyindex/releases/download/v${fancyindex_version}/ngx-fancyindex-${fancyindex_version}.tar.xz -P ${nginx_openssl_src}
+    judge "ngx-fancyindex 下载"
 
     cd ${nginx_openssl_src} || exit
 
