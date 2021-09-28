@@ -717,7 +717,7 @@ nginx_install() {
     judge "openssl 下载"
     wget -nc --no-check-certificate https://github.com/jemalloc/jemalloc/releases/download/${jemalloc_version}/jemalloc-${jemalloc_version}.tar.bz2 -P ${nginx_openssl_src}
     judge "jemalloc 下载"
-    wget -nc --no-check-certificate  https://github.com/aperezdc/ngx-fancyindex/releases/download/v${fancyindex_version}/ngx-fancyindex-${fancyindex_version}.tar.xz -P ${nginx_openssl_src}
+    wget -nc --no-check-certificate  https://github.com/aperezdc/ngx-fancyindex/releases/download/${fancyindex_version}/ngx-fancyindex-${fancyindex_version}.tar.xz -P ${nginx_openssl_src}
     judge "ngx-fancyindex 下载"
 
     cd ${nginx_openssl_src} || exit
@@ -2311,9 +2311,9 @@ guyezi_commend() {
 menu() {
 
     echo -e "\nXray 安装管理脚本 ${Red}[${shell_version}]${Font}"
-    echo -e "--- authored by paniy ---"
+    echo -e "--- authored by guyezi ---"
     echo -e "--- changed by www.guyezi.com ---"
-    echo -e "--- https://github.com/paniy ---\n"
+    echo -e "--- https://github.com/guyezi ---\n"
     echo -e "当前已安装模式: ${shell_mode}\n"
 
     guyezi_commend
