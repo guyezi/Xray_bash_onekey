@@ -25,7 +25,7 @@
 ### 安装/更新方式
 VLESS+Nginx+WebSocket/gRPC+TLS 或 VLESS+XTLS+Nginx+ws+gRPC  或 ws/gRPC ONLY 三选一：
 ```
-bash <(curl -Ss https://raw.githubusercontent.com/paniy/Xray_bash_onekey/main/install.sh)
+bash <(curl -Ss https://raw.githubusercontent.com/guyezi/Xray_bash_onekey/main/install.sh)
 ```
 
 ### 注意事项
@@ -48,7 +48,7 @@ bash <(curl -Ss https://raw.githubusercontent.com/paniy/Xray_bash_onekey/main/in
 脚本支持自动生成 Let's encrypted 证书，有效期3个月，理论上自动生成的证书支持自动续签。
 
 ### 查看客户端配置
-`cat /etc/idleleo/xray_info.txt`
+`cat /etc/guyezi/xray_info.txt`
 
 ### Xray 简介
 
@@ -80,10 +80,10 @@ bash <(curl -Ss https://raw.githubusercontent.com/paniy/Xray_bash_onekey/main/in
 
 ### 相关目录
 
-Xray 服务端配置：`/etc/idleleo/conf/xray/config.json`
+Xray 服务端配置：`/etc/guyezi/conf/xray/config.json`
 
 Nginx 目录： `/etc/nginx`
 
-证书文件：`/etc/idleleo/cert/xray.key` 和 `/etc/idleleo/cert/xray.crt` 请注意证书权限设置
+证书文件：`/etc/guyezi/cert/xray.key` 和 `/etc/guyezi/cert/xray.crt` 请注意证书权限设置
 
-配置信息文件等：`/etc/idleleo`
+配置信息文件等：`/etc/guyezi`
