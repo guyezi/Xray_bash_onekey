@@ -2519,4 +2519,3 @@ menu() {
 
 judge_mode
 list "$1"
-
